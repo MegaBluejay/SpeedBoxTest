@@ -18,17 +18,17 @@ public class PriceCalcController : ControllerBase
     [HttpPost(Name = "GetPrice")]
     public async Task<PriceCalcOutDto> Post(PriceCalcInDto calcIn)
     {
-        var fromTask = _cdekService.GetCodeByGuid(calcIn.From);
-        var toTask = _cdekService.GetCodeByGuid(calcIn.To);
+        var fromTask = _cdekService.GetCodeByGuidAsync(calcIn.From);
+        var toTask = _cdekService.GetCodeByGuidAsync(calcIn.To);
         var codes = await Task.WhenAll(fromTask, toTask);
         var (fromCode, toCode) = (codes[0], codes[1]);
-        var price = await _cdekService.GetPrice(
+        var price = await _cdekService.GetPriceAsync(
             from: fromCode,
             to: toCode,
             weight: calcIn.Weight,
             length: calcIn.Length,
             width: calcIn.Width, 
             height: calcIn.Height);
-        return new PriceCalcOutDto() { Price = price };
+        return new PriceCalcOutDto { Price = price };
     }
 }
