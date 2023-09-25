@@ -1,15 +1,28 @@
+using IdentityModel.Client;
+using SpeedBoxTest.CdekApi;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAccessTokenManagement(options =>
+{
+    options.Client.Clients.Add(nameof(CdekService), new ClientCredentialsTokenRequest
+    {
+        Address = "https://api.edu.cdek.ru/v2/oath/token",
+        ClientId = "EMscd6r9JnFiQ3bLoyjJY6eM78JrJceI",
+        ClientSecret = "PjLZkKBHEiLK3YsjtNrt3TGNG0ahs3kG",
+    });
+});
+builder.Services.AddClientAccessTokenHttpClient(nameof(CdekService), nameof(CdekService), client =>
+{
+    client.BaseAddress = new Uri("https://api.edu.cdek.ru/v2/");
+});
+builder.Services.AddScoped<ICdekService, CdekService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
