@@ -1,23 +1,43 @@
-using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using UnitsNet;
 
 namespace SpeedBoxTest.Dtos;
 
 public class PriceCalcInDto
 {
-    // g
-    [Required]
-    public int Weight { get; set; }
+    [JsonIgnore]
+    public Mass Weight { get; set; }
     
-    // mm
-    [Required]
-    public int Length { get; set; }
-    [Required]
-    public int Width { get; set; }
-    [Required]
-    public int Height { get; set; }
+    [JsonPropertyName("weight")]
+    public int WeightGrams
+    {
+        set => Weight = Mass.FromGrams(value);
+    }
     
-    [Required]
-    public Guid From { get; set; }
-    [Required]
-    public Guid To { get; set; }
+    [JsonIgnore]
+    public Length Length { get; set; }
+
+    [JsonPropertyName("length")]
+    public int LengthMm
+    {
+        set => Length = Length.FromMillimeters(value);
+    }
+    
+    [JsonIgnore]
+    public Length Width { get; set; }
+
+    [JsonPropertyName("width")]
+    public int WidthMm
+    {
+        set => Width = Length.FromMillimeters(value);
+    }
+    
+    [JsonIgnore]
+    public Length Height { get; set; }
+
+    [JsonPropertyName("height")]
+    public int HeightMm
+    {
+        set => Height = Length.FromMillimeters(value);
+    }
 }
