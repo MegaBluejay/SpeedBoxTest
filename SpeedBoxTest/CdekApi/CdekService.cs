@@ -31,7 +31,9 @@ public class CdekService : ICdekService
     {
         var request = new PriceCalcInDto
         {
+            // e-shop
             Type = 1,
+            // Door-door parcel
             TariffCode = 139,
             From = new LocationInDto { Code = from.Code },
             To = new LocationInDto { Code = to.Code },
