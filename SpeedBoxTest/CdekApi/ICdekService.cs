@@ -6,7 +6,7 @@ public interface ICdekService
 {
     Task<CdekLocationCode?> GetCodeByGuidAsync(Guid guid);
 
-    Task<int> GetPriceAsync(
+    Task<double> GetPriceAsync(
         CdekLocationCode from,
         CdekLocationCode to,
         Mass weight,

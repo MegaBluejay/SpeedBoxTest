@@ -27,7 +27,7 @@ public class CdekService : ICdekService
         return new CdekLocationCode(location.Code);
     }
 
-    public async Task<int> GetPriceAsync(CdekLocationCode from, CdekLocationCode to, Mass weight, Length length, Length width, Length height)
+    public async Task<double> GetPriceAsync(CdekLocationCode from, CdekLocationCode to, Mass weight, Length length, Length width, Length height)
     {
         var request = new PriceCalcInDto
         {

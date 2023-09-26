@@ -5,5 +5,5 @@ namespace SpeedBoxTest.Dtos;
 public class PriceCalcOutDto
 {
     [Required]
-    public int Price { get; set; }
+    public double Price { get; set; }
 }

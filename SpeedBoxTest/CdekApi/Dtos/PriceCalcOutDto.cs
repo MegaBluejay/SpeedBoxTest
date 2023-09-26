@@ -5,5 +5,5 @@ namespace SpeedBoxTest.CdekApi.Dtos;
 public class PriceCalcOutDto
 {
     [JsonPropertyName("delivery_sum")]
-    public int Price { get; set; }
+    public double Price { get; set; }
 }
