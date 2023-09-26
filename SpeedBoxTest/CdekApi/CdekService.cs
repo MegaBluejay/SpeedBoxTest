@@ -1,7 +1,6 @@
 using UnitsNet;
 using Flurl.Http;
 using SpeedBoxTest.CdekApi.Dtos;
-using IHttpClientFactory = System.Net.Http.IHttpClientFactory;
 
 namespace SpeedBoxTest.CdekApi;
 
