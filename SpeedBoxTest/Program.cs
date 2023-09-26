@@ -1,5 +1,10 @@
+using Flurl.Http;
+using Flurl.Serialization.TextJson;
 using IdentityModel.Client;
 using SpeedBoxTest.CdekApi;
+
+FlurlHttp.Configure(settings =>
+    settings.WithTextJsonSerializer());
 
 var builder = WebApplication.CreateBuilder(args);
 
