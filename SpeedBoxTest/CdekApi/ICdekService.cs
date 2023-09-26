@@ -4,7 +4,7 @@ namespace SpeedBoxTest.CdekApi;
 
 public interface ICdekService
 {
-    Task<CdekLocationCode?> GetCodeByGuidAsync(Guid guid);
+    Task<CdekLocationCode> GetCodeByGuidAsync(Guid guid);
 
     Task<double> GetPriceAsync(
         CdekLocationCode from,

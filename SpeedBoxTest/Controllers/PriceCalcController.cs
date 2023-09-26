@@ -1,3 +1,4 @@
+using Flurl.Http;
 using Microsoft.AspNetCore.Mvc;
 using SpeedBoxTest.CdekApi;
 using SpeedBoxTest.Dtos;
@@ -18,26 +19,28 @@ public class PriceCalcController : ControllerBase
     [HttpPost(Name = "GetPrice")]
     public async Task<IActionResult> Post(PriceCalcInDto calcIn)
     {
-        var fromTask = _cdekService.GetCodeByGuidAsync(calcIn.From);
-        var toTask = _cdekService.GetCodeByGuidAsync(calcIn.To);
-        var codes = await Task.WhenAll(fromTask, toTask);
-        var (fromCode, toCode) = (codes[0], codes[1]);
-        if (fromCode == null)
+        try
         {
-            return NotFound($"City {calcIn.From} not found");
+            var fromTask = _cdekService.GetCodeByGuidAsync(calcIn.From);
+            var toTask = _cdekService.GetCodeByGuidAsync(calcIn.To);
+            var codes = await Task.WhenAll(fromTask, toTask);
+            var (fromCode, toCode) = (codes[0], codes[1]);
+            var price = await _cdekService.GetPriceAsync(
+                from: fromCode,
+                to: toCode,
+                weight: calcIn.Weight,
+                length: calcIn.Length,
+                width: calcIn.Width,
+                height: calcIn.Height);
+            return Ok(new PriceCalcOutDto { Price = price });
         }
-
-        if (toCode == null)
+        catch (LocationNotFoundException e)
         {
-            return NotFound($"City {calcIn.To} not found");
+            return NotFound($"location {e.Guid} not found");
         }
-        var price = await _cdekService.GetPriceAsync(
-            from: (CdekLocationCode)fromCode,
-            to: (CdekLocationCode)toCode,
-            weight: calcIn.Weight,
-            length: calcIn.Length,
-            width: calcIn.Width, 
-            height: calcIn.Height);
-        return Ok(new PriceCalcOutDto { Price = price });
+        catch (FlurlHttpException)
+        {
+            return BadRequest("CDEK API Error");
+        }
     }
 }
