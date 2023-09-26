@@ -13,12 +13,18 @@ public class CdekService : ICdekService
         _client = new FlurlClient(httpClientFactory.CreateClient(nameof(CdekService)));
     }
 
-    public async Task<CdekLocationCode> GetCodeByGuidAsync(Guid guid)
+    public async Task<CdekLocationCode?> GetCodeByGuidAsync(Guid guid)
     {
         var response = await _client.Request("/location/cities")
             .SetQueryParam("fias_guid", guid)
-            .GetJsonAsync<LocationInfoOutDto>();
-        return new CdekLocationCode(response.Code);
+            .GetJsonAsync<List<LocationInfoOutDto>>();
+        var location = response.ElementAtOrDefault(0);
+        if (location == null)
+        {
+            return null;
+        }
+
+        return new CdekLocationCode(location.Code);
     }
 
     public async Task<int> GetPriceAsync(CdekLocationCode from, CdekLocationCode to, Mass weight, Length length, Length width, Length height)
